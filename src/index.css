@@ -4,7 +4,7 @@
   font-weight: 400;
 
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
+  color: #080101de;
   background-color: #242424;
 
   font-synthesis: none;
@@ -65,4 +65,33 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+.container {
+  text-align: center;
+  font-family: Arial, sans-serif;
+  padding: 20px;
+}
+
+.pokemon-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 20px;
+  justify-content: center;
+}
+
+.pokemon-card {
+  border: 2px solid #333;
+  border-radius: 10px;
+  padding: 15px;
+  text-align: center;
+  background-color: #f8f8f8;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+  width: 200px;
+}
+
+.pokemon-image {
+  width: 120px;
+  height: 120px;
 }

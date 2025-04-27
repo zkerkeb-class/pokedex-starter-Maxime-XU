@@ -1,0 +1,119 @@
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import PokemonCard from "./components/PokemonCard";
+import "./App.css";
+
+function App() {
+  const [pokemons, setPokemons] = useState([]);
+  const [nameFilter, setNameFilter] = useState("");
+  const [typeFilter, setTypeFilter] = useState([]);
+  const [hpFilter, setHpFilter] = useState("");
+  const [attackFilter, setAttackFilter] = useState("");
+  const [defenseFilter, setDefenseFilter] = useState("");
+  const [speedFilter, setSpeedFilter] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Charger les Pokémon depuis l'API
+  useEffect(() => {
+    axios
+      .get(`${import.meta.env.VITE_API_URL}/api/pokemons`)
+      .then((response) => {
+        setPokemons(response.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Erreur lors de la récupération des Pokémon :", err);
+        setError("Impossible de récupérer les Pokémon.");
+        setLoading(false);
+      });
+  }, []);
+
+  // Liste de tous les types disponibles
+  const allTypes = [
+    "Grass", "Poison", "Fire", "Water", "Bug", "Flying", "Normal", "Electric", "Ground",
+    "Psychic", "Fairy", "Rock", "Ice", "Dragon", "Ghost", "Fighting", "Steel"
+  ];
+
+  // Appliquer les filtres cumulés
+  const filteredPokemons = pokemons.filter((pokemon) => {
+    const nameMatch = pokemon.name.english.toLowerCase().includes(nameFilter);
+    const typeMatch = typeFilter.length === 0 || typeFilter.every((t) => pokemon.type.includes(t));
+    const hpMatch = hpFilter === "" || pokemon.base.HP >= parseInt(hpFilter);
+    const attackMatch = attackFilter === "" || pokemon.base.Attack >= parseInt(attackFilter);
+    const defenseMatch = defenseFilter === "" || pokemon.base.Defense >= parseInt(defenseFilter);
+    const speedMatch = speedFilter === "" || pokemon.base.Speed >= parseInt(speedFilter);
+
+    return nameMatch && typeMatch && hpMatch && attackMatch && defenseMatch && speedMatch;
+  });
+
+  // Gérer le clic sur les boutons de type
+  const toggleType = (type) => {
+    setTypeFilter((prev) =>
+      prev.includes(type) ? prev.filter((t) => t !== type) : [...prev, type]
+    );
+  };
+
+  return (
+    <div className="app">
+      <h1>Pokédex</h1>
+
+      {loading && <p>Chargement des Pokémon...</p>}
+      {error && <p className="error">{error}</p>}
+
+      <div className="filters">
+        <input
+          type="text"
+          placeholder="Nom (en anglais)"
+          value={nameFilter}
+          onChange={(e) => setNameFilter(e.target.value.toLowerCase())}
+        />
+
+        <input
+          type="number"
+          placeholder="HP min"
+          value={hpFilter}
+          onChange={(e) => setHpFilter(e.target.value)}
+        />
+        <input
+          type="number"
+          placeholder="Attaque min"
+          value={attackFilter}
+          onChange={(e) => setAttackFilter(e.target.value)}
+        />
+        <input
+          type="number"
+          placeholder="Défense min"
+          value={defenseFilter}
+          onChange={(e) => setDefenseFilter(e.target.value)}
+        />
+        <input
+          type="number"
+          placeholder="Vitesse min"
+          value={speedFilter}
+          onChange={(e) => setSpeedFilter(e.target.value)}
+        />
+      </div>
+
+      <div className="type-filters">
+        {allTypes.map((type) => (
+          <button
+            key={type}
+            className={typeFilter.includes(type) ? "active" : ""}
+            onClick={() => toggleType(type)}
+          >
+            {type}
+          </button>
+        ))}
+      </div>
+
+      <div className="pokemon-container">
+        {filteredPokemons.map((pokemon) => (
+          <PokemonCard key={pokemon.id} pokemon={pokemon} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default App;

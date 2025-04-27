@@ -1,0 +1,270 @@
+/* Variables */
+:root {
+  --border-color: #e8c75a;
+  --border-pattern: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15"><rect width="15" height="15" fill="%23e8c75a"/><path d="M0,0 L15,15 M0,15 L15,0" stroke="%23d4b34a" stroke-width="1"/></svg>');
+  --bg-pattern: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="none" stroke="rgba(0,0,0,0.05)" stroke-width="8"/></svg>');
+  --shine-gradient: linear-gradient(
+    to bottom right,
+    rgba(255, 255, 255, 0) 45%,
+    rgba(255, 255, 255, 0.8) 50%,
+    rgba(255, 255, 255, 0) 55%
+  );
+}
+
+/* Base Card Styles */
+.pokemon-card {
+  width: 300px;
+  height: 420px;
+  border-radius: 15px;
+  padding: 15px;
+  background: linear-gradient(to bottom, #f9f9f9 0%, #e9e9e9 100%);
+  border: 15px solid var(--border-color);
+  border-image: var(--border-pattern) 15;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3), 
+              inset 0 0 20px rgba(255, 255, 255, 0.5);
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  font-family: 'Pokemon', 'Arial', sans-serif;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+/* Card Background Effects */
+.pokemon-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--bg-pattern);
+  background-size: 100px 100px;
+  opacity: 0.3;
+  z-index: 0;
+}
+
+.pokemon-card::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: var(--shine-gradient);
+  transform: rotate(30deg);
+  animation: shine 3s infinite;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Card Content */
+.card-header, .type-container, .pokemon-stats, .pokemon-actions {
+  position: relative;
+  z-index: 1;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.pokemon-name {
+  font-size: 22px;
+  font-weight: bold;
+  margin: 0;
+  color: #2a2a2a;
+  text-shadow: 1px 1px 1px rgba(255, 255, 255, 0.8);
+  text-transform: capitalize;
+}
+
+.pokemon-hp, .pokemon-type {
+  color: white;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-weight: bold;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
+}
+
+.pokemon-hp {
+  background: #ff0000;
+  font-size: 14px;
+}
+
+.pokemon-image {
+  width: 180px;
+  height: 180px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 10px;
+  padding: 10px;
+  border: 3px solid #e0e0e0;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+  object-fit: contain;
+  position: relative;
+  z-index: 1;
+}
+
+.type-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 10px 0;
+}
+
+.pokemon-stats {
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 10px;
+  padding: 10px;
+  margin: 5px 0;
+  font-size: 14px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px;
+  border: 2px solid #e0e0e0;
+}
+
+.pokemon-stats p {
+  margin: 5px 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+/* Buttons */
+.pokemon-actions {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  margin-top: auto;
+  z-index: 10;
+  pointer-events: auto;
+}
+
+.pokemon-actions button {
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  position: relative;
+  overflow: hidden;
+  color: white;
+}
+
+.pokemon-actions button::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: var(--shine-gradient);
+  transform: rotate(30deg);
+  animation: shine 1.5s infinite;
+}
+
+.attack-button {
+  background: linear-gradient(to bottom, #ff4444, #cc0000);
+}
+
+.heal-button {
+  background: linear-gradient(to bottom, #44aa44, #228822);
+}
+
+.delete-button {
+  background: #888;
+}
+
+.pokemon-actions button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Animations */
+@keyframes shine {
+  0% { transform: rotate(30deg) translate(-30%, -30%); }
+  100% { transform: rotate(30deg) translate(30%, 30%); }
+}
+
+@keyframes foilEffect {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 100% 100%; }
+}
+
+@keyframes attackAnimation {
+  0% { transform: translateX(0) scale(1); }
+  25% { transform: translateX(-10px) scale(1.1); }
+  50% { transform: translateX(10px) scale(1.1); }
+  75% { transform: translateX(-5px) scale(1.05); }
+  100% { transform: translateX(0) scale(1); }
+}
+
+@keyframes defenseAnimation {
+  0% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-15px) scale(1.05); }
+  100% { transform: translateY(0) scale(1); }
+}
+
+@keyframes damageFlash {
+  0%, 100% { background-color: normal; }
+  50% { background-color: rgba(255,0,0,0.3); }
+}
+
+/* Special Effects */
+.pokemon-card.foil {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.8) 0%,
+    rgba(200, 200, 255, 0.5) 25%,
+    rgba(255, 200, 200, 0.5) 50%,
+    rgba(200, 255, 200, 0.5) 75%,
+    rgba(255, 255, 255, 0.8) 100%
+  );
+  background-size: 200% 200%;
+  animation: foilEffect 5s infinite alternate;
+}
+
+.pokemon-card:hover {
+  transform: scale(1.03) rotate(1deg);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+}
+
+.pokemon-card.attack {
+  animation: attackAnimation 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.pokemon-card.defense {
+  animation: defenseAnimation 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.damage-effect {
+  animation: damageFlash 0.3s 2;
+}
+
+/* Miscellaneous */
+.pokemon-message {
+  color: #d10000;
+  font-weight: bold;
+  margin: 5px 0 0;
+  font-size: 14px;
+}
+
+.hp-bar {
+  height: 10px;
+  background: linear-gradient(to right, #ff0000, #ffcc00, #00ff00);
+  border-radius: 5px;
+  transition: width 0.5s ease;
+  box-shadow: 0 0 5px rgba(0,0,0,0.3);
+}
